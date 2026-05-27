@@ -10,7 +10,8 @@
       "require": "./dist/verovio.cjs"
     },
     "./wasm": "./dist/verovio-module.mjs",
-    "./wasm-hum": "./dist/verovio-module-hum.mjs"
+    "./wasm-hum": "./dist/verovio-module-hum.mjs",
+    "./wasm-light": "./dist/verovio-module-light.mjs"
   },
   "files": [
     "dist"

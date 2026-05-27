@@ -19,6 +19,10 @@ cp ./build/verovio.js ./npm/dist/verovio-module-hum.mjs
 ./buildToolkit -c -w -M -H -m
 cp ./build/verovio.js ./npm/dist/verovio-module.mjs
 
+# build light modularized emscripten module (Leipzig only, no humdrum)
+./buildToolkit -c -w -M -H -m -x "Bravura,Petaluma,Leland,Gootville"
+cp ./build/verovio.js ./npm/dist/verovio-module-light.mjs
+
 # build CommonJS and ESM code for verovio toolkit
 npm --prefix npm run build
 
