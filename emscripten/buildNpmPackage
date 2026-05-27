@@ -25,6 +25,16 @@ cp ./build/verovio.js ./npm/dist/verovio-module-split.mjs
 cp ./build/verovio.wasm ./npm/dist/verovio-module-split.wasm
 sed -i '' 's/verovio\.wasm/verovio-module-split.wasm/g' ./npm/dist/verovio-module-split.mjs
 
+# build light modularized emscripten module (Leipzig only, no humdrum)
+./buildToolkit -c -w -M -H -m -x "Bravura,Petaluma,Leland,Gootville"
+cp ./build/verovio.js ./npm/dist/verovio-module-light.mjs
+
+# build light modularized emscripten module with separate .wasm (Leipzig only, no humdrum)
+./buildToolkit -c -w -M -H -m -S -x "Bravura,Petaluma,Leland,Gootville"
+cp ./build/verovio.js ./npm/dist/verovio-module-light-split.mjs
+cp ./build/verovio.wasm ./npm/dist/verovio-module-light-split.wasm
+sed -i '' 's/verovio\.wasm/verovio-module-light-split.wasm/g' ./npm/dist/verovio-module-light-split.mjs
+
 # build CommonJS and ESM code for verovio toolkit
 npm --prefix npm run build
 

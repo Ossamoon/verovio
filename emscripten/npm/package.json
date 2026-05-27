@@ -11,7 +11,9 @@
     },
     "./wasm": "./dist/verovio-module.mjs",
     "./wasm-hum": "./dist/verovio-module-hum.mjs",
-    "./wasm-split": "./dist/verovio-module-split.mjs"
+    "./wasm-split": "./dist/verovio-module-split.mjs",
+    "./wasm-light": "./dist/verovio-module-light.mjs",
+    "./wasm-light-split": "./dist/verovio-module-light-split.mjs"
   },
   "files": [
     "dist"
