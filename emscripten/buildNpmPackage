@@ -19,6 +19,12 @@ cp ./build/verovio.js ./npm/dist/verovio-module-hum.mjs
 ./buildToolkit -c -w -M -H -m
 cp ./build/verovio.js ./npm/dist/verovio-module.mjs
 
+# build modularized emscripten module without humdrum (separate .wasm file)
+./buildToolkit -c -w -M -H -m -S
+cp ./build/verovio.js ./npm/dist/verovio-module-split.mjs
+cp ./build/verovio.wasm ./npm/dist/verovio-module-split.wasm
+sed -i '' 's/verovio\.wasm/verovio-module-split.wasm/g' ./npm/dist/verovio-module-split.mjs
+
 # build CommonJS and ESM code for verovio toolkit
 npm --prefix npm run build
 

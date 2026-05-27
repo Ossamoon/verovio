@@ -35,6 +35,7 @@ Options:
 -H      Disable Humdrum importer
 -M      Clean existing makefile
 -m      Modularize emscripten build
+-S      No single file (separate .wasm file, requires -w)
 -d      Debug mode (for Webassembly only)
 
 EOT
@@ -48,7 +49,7 @@ die "ERROR: emscripten cmake (emcmake) not found.\n" unless $EMCMAKE;
 die "ERROR: emscripten make (emmake) not found.\n" unless $EMMAKE;
 
 # Parse command-line options
-my ($version, $chattyQ, $helpQ, $exclusion, $wasmQ, $makeQ, $modularizeQ, $debug);
+my ($version, $chattyQ, $helpQ, $exclusion, $wasmQ, $makeQ, $modularizeQ, $nosinglefileQ, $debug);
 my ($nohumdrum);
 my ($FLAGS_NAME, $VERSION, $CHATTY);
 
@@ -64,10 +65,11 @@ GetOptions (
 	'v|version=s'   => \$VERSION,
 	'x|exclusion=s' => \$exclusion,
 	'w|wasm'        => \$wasmQ,
-	'm|modularize'  => \$modularizeQ,
-	'H|no-humdrum'  => \$nohumdrum,
-	'M|make'        => \$makeQ,
-	'd|debug'       => \$debug
+	'm|modularize'      => \$modularizeQ,
+	'S|no-single-file'  => \$nosinglefileQ,
+	'H|no-humdrum'      => \$nohumdrum,
+	'M|make'            => \$makeQ,
+	'd|debug'           => \$debug
 );
 
 # Default compiling uses ASM and large file support.
@@ -112,13 +114,18 @@ if ($wasmQ) {
 	$LFLAGS .= " -s INITIAL_MEMORY=128MB";
 	$LFLAGS .= " -s STACK_SIZE=64MB";
 	$LFLAGS .= " -s ALLOW_MEMORY_GROWTH";
-	$LFLAGS .= " -s INCOMING_MODULE_JS_API=onRuntimeInitialized";
 	$LFLAGS .= " -fwasm-exceptions";
-	if ($debug) {
-		$LFLAGS .= " --emit-symbol-map -sASSERTIONS";
+	if ($nosinglefileQ) {
+		$LFLAGS .= " -s INCOMING_MODULE_JS_API=onRuntimeInitialized,locateFile,wasmBinary";
 	}
 	else {
-		$LFLAGS .= " -s SINGLE_FILE=1";
+		$LFLAGS .= " -s INCOMING_MODULE_JS_API=onRuntimeInitialized";
+		if ($debug) {
+			$LFLAGS .= " --emit-symbol-map -sASSERTIONS";
+		}
+		else {
+			$LFLAGS .= " -s SINGLE_FILE=1";
+		}
 	}
 	$FLAGS_NAME = "-wasm";
 }
