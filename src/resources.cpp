@@ -63,7 +63,8 @@ bool Resources::InitFonts()
     m_cachedGlyph.reset();
     m_loadedFonts.clear();
 
-    // Font Bravura first. As it is expected to have always all symbols we build the code -> name table from it
+    // Load Bravura first when available — it has all SMuFL symbols. The glyph name table is built
+    // from whichever font loads first, so single-font builds (e.g., Leipzig-only) also work.
     if (!LoadFont(BRAVURA)) LogError("Bravura font could not be loaded.");
     // Leipzig is our initial default font
     if (!LoadFont(LEIPZIG)) LogError("Leipzig font could not be loaded.");
@@ -353,7 +354,7 @@ bool Resources::LoadFont(const std::string &fontName, ZipFileReader *zipFile)
         return false;
     }
 
-    bool buildNameTable = (fontName == BRAVURA) ? true : false;
+    bool buildNameTable = m_glyphNameTable.empty();
     bool isFallback = ((fontName == BRAVURA) || (fontName == LEIPZIG)) ? true : false;
 
     m_loadedFonts.insert(std::pair<std::string, LoadedFont>(fontName, Resources::LoadedFont(fontName, isFallback)));
