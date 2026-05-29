@@ -65,7 +65,7 @@ bool Resources::InitFonts()
 
     // Load Bravura first when available — it has all SMuFL symbols. The glyph name table is built
     // from whichever font loads first, so single-font builds (e.g., Leipzig-only) also work.
-    if (!LoadFont(BRAVURA)) LogError("Bravura font could not be loaded.");
+    if (!LoadFont(BRAVURA)) LogWarning("Bravura font not available, skipping.");
     // Leipzig is our initial default font
     if (!LoadFont(LEIPZIG)) LogError("Leipzig font could not be loaded.");
 
@@ -344,7 +344,7 @@ bool Resources::LoadFont(const std::string &fontName, ZipFileReader *zipFile)
         pugi::xml_parse_result parseResult = doc.load_file(filename.c_str());
         if (!parseResult) {
             // File not found, default bounding boxes will be used
-            LogError("Failed to load font and glyph bounding boxes");
+            LogWarning("Font '%s' not available: failed to load glyph bounding boxes", fontName.c_str());
             return false;
         }
     }
