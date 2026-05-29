@@ -354,7 +354,6 @@ bool Resources::LoadFont(const std::string &fontName, ZipFileReader *zipFile)
         return false;
     }
 
-    bool buildNameTable = m_glyphNameTable.empty();
     bool isFallback = ((fontName == BRAVURA) || (fontName == LEIPZIG)) ? true : false;
 
     m_loadedFonts.insert(std::pair<std::string, LoadedFont>(fontName, Resources::LoadedFont(fontName, isFallback)));
@@ -409,9 +408,7 @@ bool Resources::LoadFont(const std::string &fontName, ZipFileReader *zipFile)
 
         const char32_t smuflCode = (char32_t)strtol(c_attribute.value(), NULL, 16);
         glyphTable[smuflCode] = glyph;
-        if (buildNameTable) {
-            m_glyphNameTable[n_attribute.value()] = smuflCode;
-        }
+        m_glyphNameTable[n_attribute.value()] = smuflCode;
     }
 
     if (isFallback && glyphTable.size() < SMUFL_COUNT) {
