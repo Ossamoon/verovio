@@ -54,7 +54,7 @@ public:
     ///@}
 
     /** Status checker */
-    bool Ok() const { return (m_loadedFonts.size() > 0); }
+    bool Ok() const { return IsFontLoaded(m_defaultFontName); }
 
     /**
      * Return the name of the text font (Times or Liberation)
