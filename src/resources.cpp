@@ -408,7 +408,12 @@ bool Resources::LoadFont(const std::string &fontName, ZipFileReader *zipFile)
 
         const char32_t smuflCode = (char32_t)strtol(c_attribute.value(), NULL, 16);
         glyphTable[smuflCode] = glyph;
-        m_glyphNameTable[n_attribute.value()] = smuflCode;
+        // Build the glyph name table from the first fallback font to load (Bravura, or Leipzig
+        // when Bravura is excluded). The empty() check keeps a single source and prevents later
+        // fonts from overwriting it.
+        if (isFallback && m_glyphNameTable.empty()) {
+            m_glyphNameTable[n_attribute.value()] = smuflCode;
+        }
     }
 
     if (isFallback && glyphTable.size() < SMUFL_COUNT) {
